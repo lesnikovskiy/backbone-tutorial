@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title><%= title %></title>
+	<link rel="stylesheet" href="/css/style.css" type="text/css" />	
+	<script type="text/javascript" src="/js/jquery.js"></script>
+	<script type="text/javascript" src="/js/underscore.js"></script>
+	<script type="text/javascript" src="/js/backbone.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		// Tutorial to follow link: http://habrahabr.ru/post/127049/
+		var AppState = {
+			username: ''
+		};
+		
+		var Family = ['Sasha', 'Yulia', 'Olya'];
+		
+		var Start = Backbone.View.extend({
+			el: $('#block'),
+			template: _.template($('#start').html()),
+			events: {
+				'click input:button': 'check'
+			},
+			check: function() {
+				AppState.username = this.el.find('input:text').val();
+				if (AppState.username === 'test')
+					controller.navigate('success', true);
+				else
+					controller.navigate('error', true);
+			},
+			render: function() {
+				$(this.el).html(this.template());
+			}
+		});	
+		
+		var Success = Backbone.View.extend({
+			el: $('#block'),
+			template: _.template($('#success').html()),
+			render: function() {
+				$(this.el).html(this.template(AppState));
+			}
+		});
+		
+		var Error = Backbone.View.extend({
+			el: $('#block'),
+			template: _.template($('#error').html()),
+			render: function() {
+				$(this.el).html(this.template(AppState));
+			}
+		});
+		
+		Views = {
+			start: new Start(),
+			success: new Success(),
+			error: new Error()
+		};
+			
+		var Controller = Backbone.Router.extend({
+			routes: {
+				'': 'start',
+				'!/': 'start',
+				'!/success': 'success',
+				'!/error': 'error'
+			},
+			
+			start: function() {
+				if (Views.start)
+					Views.start.render();
+			},
+			
+			success: function() {
+				if (Views.success)
+					Views.success.render();
+			},
+			
+			error: function() {
+				if (Views.error)
+					Views.error.render();
+			}
+		});
+		
+		var controller = new Controller();		
+		
+		
+		
+		Backbone.history.start();
+	});
+	</script>
+</head>
+<body>
+	<h3><%= message %></h3>
+	
+	<div id="menu">
+		<ul>
+			<li><a href="#!/">Start</a></li>
+			<li><a href="#!/success">Success</a></li>
+			<li><a href="#!/error">Error</a></li>
+		</ul>
+	</div>
+	
+	<div id="block" class="block"></div>
+	
+	<script type="text/template" id="start>
+		<div id="start" class="block">
+			<div class="userplace">
+				<label for="username">User name:</label>
+				<input type="text" id="username" />			
+			</div>
+			<div class="buttonplace">
+				<input type="button" value="check" />
+			</div>
+		</div>
+	</script>
+	
+	<script type="text/template" id="error">
+		<div id="error" class="block">
+			Error! The user <%= username %> not found.
+			<a href="#!/">Go back</a>
+		</div>
+	</script>
+	
+	<script type="text/template" id="success">
+		<div id="success" class="block">
+			The user <%= username %> found.
+			<a href="#!/">Go back</a>
+		</div>
+	</script>
+</body>
+</html>
