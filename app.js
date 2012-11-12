@@ -4,6 +4,7 @@ var app = module.exports = express();
 var path = require('path');
 var util = require('util');
 var engine = require('ejs-locals');
+var cradle = require('cradle');
 
 app.configure(function() {
 	app.engine('ejs', engine);
@@ -26,6 +27,71 @@ app.configure(function() {
 
 app.get('/', function(req, res) {
 	res.redirect('/index.html');
+});
+
+app.post('/api/notes', function(req, res) {
+	var db = new(cradle.Connection)('127.0.0.1', '5984', {
+		auth: {
+			username: 'admin',
+			password: 'Coffee!12'
+		}
+	}).database('notes');
+
+	if (req.body) {
+		db.save(req.body, function(err, response) {
+			if (err) {
+				res.json(err);
+			}
+
+			if (response) {
+				res.json(response);
+			}
+		});
+	}
+});
+
+app.put('/api/notes', function(req, res) {
+	var db = new(cradle.Connection)('127.0.0.1', '5984', {
+		auth: {
+			username: 'admin',
+			password: 'Coffee!12'
+		}
+	}).database('notes');
+
+	if (req.body) {
+		db.save(req.body.id, req.body, function(err, response) {
+			if (err) {
+				res.json(err);
+			}
+
+			if (response) {
+				res.json(response);
+			}
+		});
+	}
+});
+
+app.delete('/api/notes', function(req, res) {
+	console.log(req.body);
+	
+	var db = new(cradle.Connection)('127.0.0.1', '5984', {
+		auth: {
+			username: 'admin',
+			password: 'Coffee!12'
+		}
+	}).database('notes');
+
+	if (req.body) {
+		db.remove(req.body.id, req.body.rev, function(err, response) {
+			if (err) {
+				res.json(err);
+			}
+
+			if (response) {
+				res.json(response);
+			}
+		});
+	}
 });
 
 http.createServer(app).listen(app.get('port'), function() {

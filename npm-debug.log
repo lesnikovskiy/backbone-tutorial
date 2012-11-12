@@ -1,0 +1,21 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/bin/npm', 'install', 'jitsu', '-g' ]
+info using npm@1.1.4
+info using node@v0.6.12
+verbose config file /home/ruslan/.npmrc
+verbose config file /usr/etc/npmrc
+verbose config file /usr/share/npm/npmrc
+silly exec /usr/bin/node "/usr/share/npm/bin/npm-get-uid-gid.js" "nobody" 1000
+silly spawning [ '/usr/bin/node',
+silly spawning   [ '/usr/share/npm/bin/npm-get-uid-gid.js', 'nobody', 1000 ],
+silly spawning   null ]
+silly output from getuid/gid {"uid":65534,"gid":1000}
+silly output from getuid/gid 
+verbose cache add [ 'jitsu', null ]
+silly cache add: name, spec, args [ undefined, 'jitsu', [ 'jitsu', null ] ]
+verbose parsed url { pathname: 'jitsu', path: 'jitsu', href: 'jitsu' }
+verbose addNamed [ 'jitsu', '' ]
+verbose addNamed [ null, '' ]
+silly name, range, hasData [ 'jitsu', '', false ]
+verbose raw, before any munging jitsu
+verbose url resolving [ 'https://registry.npmjs.org/', './jitsu' ]
