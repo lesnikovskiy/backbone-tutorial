@@ -1,23 +1,23 @@
 var FeedbackFormView = Backbone.View.extend({
 	className: 'row',
-	template: '<form>\
-	<legend>Share the feedback</legend>\
-	<div class="control-group">\
-		<label for="email">Email:</label>\
-		<input type="text" id="email" placeholder="Your email address..." />\
-	</div>\
-	<div class="control-group">\
-		<label for="website">Web site:</label>\
-		<input type="text" id="website" placeholder="You website..." />\
-	</div>\
-	<div class="control-group">\
-		<label for="feedback">Feedback:</label>\
-		<textarea name="" id="feedback" rows="6" class="input-xxlarge" placeholder="feedback here..."></textarea>\
-	</div>\
-	<button id="submit" class="btn">Submit</button>\
-</form>',
+	template: _.template('<form>\
+			<legend>Share the feedback</legend>\
+			<div class="control-group">\
+				<label for="email">Email:</label>\
+				<input type="text" id="email" placeholder="Your email address..." />\
+			</div>\
+			<div class="control-group">\
+				<label for="website">Web site:</label>\
+				<input type="text" id="website" placeholder="You website..." />\
+			</div>\
+			<div class="control-group">\
+				<label for="feedback">Feedback:</label>\
+				<textarea name="" id="feedback" rows="6" class="input-xxlarge" placeholder="feedback here..."></textarea>\
+			</div>\
+			<button id="submit" class="btn">Submit</button>\
+		</form>'),
 	render: function() {
-		this.$el.html(this.template);		
+		this.$el.html(this.template());		
 	
 		return this;
 	},
