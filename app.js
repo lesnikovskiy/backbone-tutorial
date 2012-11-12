@@ -25,10 +25,7 @@ app.configure(function() {
 });
 
 app.get('/', function(req, res) {
-	res.render('index', {
-		title: 'Backbone JS Tutorial',
-		message: 'Welcome to backbone js application---'
-	});
+	res.redirect('/index.html');
 });
 
 http.createServer(app).listen(app.get('port'), function() {
