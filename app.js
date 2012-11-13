@@ -71,7 +71,7 @@ app.put('/api/notes', function(req, res) {
 	}
 });
 
-app.delete('/api/notes', function(req, res) {
+app['delete']('/api/notes', function(req, res) {
 	console.log(req.body);
 	
 	var db = new(cradle.Connection)('127.0.0.1', '5984', {
@@ -92,6 +92,22 @@ app.delete('/api/notes', function(req, res) {
 			}
 		});
 	}
+});
+
+app.post('/user', function(req, res) {
+	var db = new(cradle.Connection)('127.0.0.1', '5984', {
+		auth: {
+			username: 'admin',
+			password: 'Coffee!12'
+		}
+	}).database('users');
+	
+	db.save(req.body, function(err, response) {
+		if (err)
+			res.json(err);
+		if (response)
+			res.json(response);
+	});
 });
 
 http.createServer(app).listen(app.get('port'), function() {

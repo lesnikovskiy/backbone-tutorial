@@ -14,29 +14,31 @@
 			defaults: {
 				title: '',
 				body: ''
+			},
+			validate: function(attrs) {
+				if (!attrs.title)
+					return 'You can\'t save note with empty title';
+					
+				if (!attrs.body)
+					return 'You can\'t save note with empty message';
+			},
+			initialize: function() {
+				this.bind('error', function(model, error) {
+					console.log('Model is invalid');
+				});
 			}
 		});
 
 		// View
 		var NotesView = Backbone.View.extend({
-			template: _.template('<form>\
-				<legend>Share your thoughts</legend>\
-				<div class="control-group">\
-					<label for="title">Title:<label>\
-					<input type="text" id="title" />\
-				</div>\
-				<div class="control-group">\
-					<textarea rows="5" cols="40" id="body"></textarea>\
-				</div>\
-				<button id="submit" class="btn">submit</button>\
-				<button id="remove" class="btn">remove</button>\
-			</form>'),
+			initialize: function() {
+				this.render();
+			},			
 			render: function() {
-				this.$el.html(this.template());
-
-				return this;
+				var template = _.template($('#form').html(), {});
+				this.$el.html(template);
 			},
-			events: {
+			events: {			
 				'click #submit': 'submitForm',
 				'click #remove': 'remove'
 			},
@@ -44,13 +46,11 @@
 				e.preventDefault();
 
 				var callback = {
-					success: function(res) {
-						console.log(arguments);
-						console.log(res);
+					success: function(model) {
+						console.log(model.toJSON());
 					},
-					error: function() {
-						console.log(arguments);
-						console.log('Error occurred');
+					error: function(model, err) {
+						//console.log(err.toJSON());
 					}
 				};
 
@@ -63,50 +63,47 @@
 				e.preventDefault();
 
 				this.model.destroy({
-					title: $('#title').val(),
-					body: $('#body').val()
-				}, function(model, response) {
-					console.log(model);
-					console.log(response);
+					success: function(model) {
+						console.log('Successfully deleted! Fooh!');
+					},
+					error: function(model, error) {
+						//console.log(error.toJSON());
+					}
 				});
-			},
-			destroy: function() {
-		        Backbone.Model.prototype.destroy.call(this, {
-		          headers: {'If-Match': this.get("_rev")}
-		        });
-		    }
+			}
 		});
-
-		// There is not controller, but application
-		// Entry point or App
+		
 		var model = new Notes();
-		var view = new NotesView({model: model});
-
-		$('#notes').html(view.render().el);
+		var view = new NotesView({el: $('#notes'), model: model});
 	});
 	</script>
 </head>
 <body>
-	<!-- http://www.beletsky.net/2012/10/baby-steps-to-backbonejs-starting-up.html -->
-	<div id="notes" class="container"></div>
-	
+	<!-- http://www.beletsky.net/2012/10/baby-steps-to-backbonejs-starting-up.html -->	
 	<script type="text/template" id="form">
 		<form>
-			<legend>Share the feedback</legend>
-			<div class="control-group">
-				<label for="email">Email:</label>
-				<input type="text" id="email" placeholder="Your email address..." />
-			</div>
-			<div class="control-group">
-				<label for="website">Web site:</label>
-				<input type="text" id="website" placeholder="You website..." />
-			</div>
-			<div class="control-group">
-				<label for="feedback">Feedback:</label>
-				<textarea name="" id="feedback" rows="6" class="input-xxlarge" placeholder="feedback here..."></textarea>
-			</div>
-			<button id="submit" class="btn">Submit</button>
+			<fieldset>
+				<legend>Share your thoughts</legend>
+				<div class="control-group">
+					<label for="title">Title<label>
+					<input type="text" id="title" />
+				</div>
+				<div class="control-group">
+					<textarea rows="5" cols="40" id="body"></textarea>
+				</div>
+				<button id="submit" class="btn">submit</button>
+				<button id="remove" class="btn">remove</button>
+			</fieldset>
 		</form>
 	</script>
+	<div id="notes" class="container"></div>
+	
+	
+	<script type="text/template" id="search_template">
+	  <label><%= lbl %></label>
+	  <input type="text" id="search_input" />
+	  <input type="button" id="search_button" value="Search" />
+	</script>
+	<div id="search_container"></div>
 </body>
 </html>
